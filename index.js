@@ -6,12 +6,9 @@ import { generateAST, isJSXAttribute, isStyle } from './ASTUtility';
 
 let ast = generateAST(test1);
 let styleExpression;
-let i = 0;
 let styleNode;
 traverse(ast, {
   enter(path) {
-    i++;
-
     if (isJSXAttribute(path.node.type)) {
       if (isStyle(path.node.name.name)) {
         styleNode = path;
@@ -72,7 +69,6 @@ const replaceWithThis = babelTypes.jsxAttribute(
 );
 styleNode.replaceWith(replaceWithThis);
 const output = generate(ast);
-console.log(output.code);
 // console.log(i);
 
 // style.root
