@@ -3,6 +3,7 @@ import traverse from 'babel-traverse';
 import { test1, test2, test3, test4, test5 } from './test';
 var babelTypes = require('@babel/types');
 import {
+  generateStylePropertyWithValue,
   generateAST,
   isJSXAttribute,
   isStyle,
@@ -45,15 +46,9 @@ const generatedStyleSheet = babelTypes.variableDeclaration(
               babelTypes.objectExpression([
                 // properties
                 // property 1
-                babelTypes.objectProperty(
-                  babelTypes.identifier('height'),
-                  babelTypes.numericLiteral(40)
-                ),
+                generateStylePropertyWithValue('height', 40),
                 // property 2
-                babelTypes.objectProperty(
-                  babelTypes.identifier('width'),
-                  babelTypes.numericLiteral(50)
-                )
+                generateStylePropertyWithValue('width', 50)
               ])
             ),
 
@@ -63,15 +58,9 @@ const generatedStyleSheet = babelTypes.variableDeclaration(
               babelTypes.objectExpression([
                 // properties
                 // property 1
-                babelTypes.objectProperty(
-                  babelTypes.identifier('height'),
-                  babelTypes.numericLiteral(40)
-                ),
+                generateStylePropertyWithValue('height', 40),
                 // property 2
-                babelTypes.objectProperty(
-                  babelTypes.identifier('width'),
-                  babelTypes.numericLiteral(50)
-                )
+                generateStylePropertyWithValue('width', 50)
               ])
             )
           ])

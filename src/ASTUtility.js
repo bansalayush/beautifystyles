@@ -12,6 +12,14 @@ const options = {
   ]
 };
 
+// TODO: check type of propertyvalue to generate corresponding literal
+export function generateStylePropertyWithValue(propertyName, propertyValue) {
+  return babelTypes.objectProperty(
+    babelTypes.identifier(propertyName),
+    babelTypes.numericLiteral(propertyValue)
+  );
+}
+
 export function generateStyles(styleName) {
   return babelTypes.jsxAttribute(
     babelTypes.jsxIdentifier('style'),
