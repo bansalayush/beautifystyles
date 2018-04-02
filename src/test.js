@@ -46,11 +46,11 @@ export const test3 = `class Test3 extends React.Component {
 const a = 2;`;
 
 // stylesheet
-const test4 = `const styles = StyleSheet.create({
-    discountParent: {
-      height: 70,
-      flexDirection: 'row',
-      paddingHorizontal: 20,
-      justifyContent: 'space-between'
-    });
-`;
+export const test4 = `class Example {} 
+const styles = StyleSheet.create({
+discountParent: {
+height: 70
+}
+})`;
+
+export const test5 = `var a = 2`;

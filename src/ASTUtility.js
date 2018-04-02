@@ -5,7 +5,10 @@ const options = {
   plugins: [
     // enable jsx syntax
     'jsx',
-    'classProperties'
+    'classProperties',
+    'flow',
+    'doExpressions',
+    'objectRestSpread'
   ]
 };
 
@@ -21,6 +24,7 @@ export function generateStyles(styleName) {
   );
 }
 export function generateAST(code) {
+  // console.log('[ASTUtility]', code);
   const ast = parse(code, options);
   return ast;
 }

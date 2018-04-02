@@ -284,3 +284,147 @@ babeltypes.memberExpression(babelTypes.identifier());
 //     }
 //   }
 // };
+
+// [[TEST4_OUTPUT]]
+//  {
+//   type: 'VariableDeclaration',
+//   start: 17,
+//   end: 85,
+//   loc: { start: { line: 1, column: 17 }, end: { line: 5, column: 2 } },
+//   declarations: [
+//     {
+//       type: 'VariableDeclarator',
+//       start: 23,
+//       end: 85,
+//       loc: { start: { line: 1, column: 23 }, end: { line: 5, column: 2 } },
+//       id: {
+//         type: 'Identifier',
+//         start: 23,
+//         end: 29,
+//         loc: {
+//           start: { line: 1, column: 23 },
+//           end: { line: 1, column: 29 },
+//           identifierName: 'styles'
+//         },
+//         name: 'styles'
+//       },
+//       init: {
+//         type: 'CallExpression',
+//         start: 32,
+//         end: 85,
+//         loc: { start: { line: 1, column: 32 }, end: { line: 5, column: 2 } },
+//         callee: {
+//           type: 'MemberExpression',
+//           start: 32,
+//           end: 49,
+//           loc: { start: { line: 1, column: 32 }, end: { line: 1, column: 49 } },
+//           object: {
+//             type: 'Identifier',
+//             start: 32,
+//             end: 42,
+//             loc: {
+//               start: { line: 1, column: 32 },
+//               end: { line: 1, column: 42 },
+//               identifierName: 'StyleSheet'
+//             },
+//             name: 'StyleSheet'
+//           },
+//           property: {
+//             type: 'Identifier',
+//             start: 43,
+//             end: 49,
+//             loc: {
+//               start: { line: 1, column: 43 },
+//               end: { line: 1, column: 49 },
+//               identifierName: 'create'
+//             },
+//             name: 'create'
+//           },
+//           computed: false
+//         },
+//         arguments: [
+//           {
+//             type: 'ObjectExpression',
+//             start: 50,
+//             end: 84,
+//             loc: {
+//               start: { line: 1, column: 50 },
+//               end: { line: 5, column: 1 }
+//             },
+//             properties: [
+//               {
+//                 type: 'ObjectProperty',
+//                 start: 52,
+//                 end: 82,
+//                 loc: {
+//                   start: { line: 2, column: 0 },
+//                   end: { line: 4, column: 1 }
+//                 },
+//                 method: false,
+//                 shorthand: false,
+//                 computed: false,
+//                 key: {
+//                   type: 'Identifier',
+//                   start: 52,
+//                   end: 66,
+//                   loc: {
+//                     start: { line: 2, column: 0 },
+//                     end: { line: 2, column: 14 },
+//                     identifierName: 'discountParent'
+//                   },
+//                   name: 'discountParent'
+//                 },
+//                 value: {
+//                   type: 'ObjectExpression',
+//                   start: 68,
+//                   end: 82,
+//                   loc: {
+//                     start: { line: 2, column: 16 },
+//                     end: { line: 4, column: 1 }
+//                   },
+//                   properties: [
+//                     {
+//                       type: 'ObjectProperty',
+//                       start: 70,
+//                       end: 80,
+//                       loc: {
+//                         start: { line: 3, column: 0 },
+//                         end: { line: 3, column: 10 }
+//                       },
+//                       method: false,
+//                       shorthand: false,
+//                       computed: false,
+//                       key: {
+//                         type: 'Identifier',
+//                         start: 70,
+//                         end: 76,
+//                         loc: {
+//                           start: { line: 3, column: 0 },
+//                           end: { line: 3, column: 6 },
+//                           identifierName: 'height'
+//                         },
+//                         name: 'height'
+//                       },
+//                       value: {
+//                         type: 'NumericLiteral',
+//                         start: 78,
+//                         end: 80,
+//                         loc: {
+//                           start: { line: 3, column: 8 },
+//                           end: { line: 3, column: 10 }
+//                         },
+//                         extra: { rawValue: 70, raw: '70' },
+//                         value: 70
+//                       }
+//                     }
+//                   ]
+//                 }
+//               }
+//             ]
+//           }
+//         ]
+//       }
+//     }
+//   ],
+//   kind: 'const'
+// };

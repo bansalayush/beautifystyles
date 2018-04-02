@@ -1,6 +1,6 @@
 import generate from 'babel-generator';
 import traverse from 'babel-traverse';
-import { test1, test2, test3 } from './test';
+import { test1, test2, test3, test4, test5 } from './test';
 var babelTypes = require('@babel/types');
 import {
   generateAST,
@@ -9,60 +9,75 @@ import {
   generateStyles
 } from './ASTUtility';
 
-let ast = generateAST(test1);
+let ast = generateAST(test4);
 let styleExpression;
 let styleNode;
 traverse(ast, {
-  enter(path) {
-    if (isJSXAttribute(path.node.type)) {
-      if (isStyle(path.node.name.name)) {
-        styleNode = path;
-        /** styleExpression contains an array of object mentioned in stylesExpressionObject.js  **/
-        // styleExpression = path.node.value.expression;
-        // console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@\n');
-        // console.log(JSON.stringify(styleExpression));
-        // console.log('\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n');
-        // let styleExpressionArray = styleExpression.properties;
-        // const obj = JSON.stringify(styleExpressionArray);
-        // let c = JSON.parse(obj); // converting back to object
-        // console.log(obj);
-
-        /** attributes to consider
-         key.name,value.type,value.value **/
-        // c.forEach(styleExpression => {
-        //   if (styleExpression.value.type === 'StringLiteral') {
-        //     console.log(
-        //       styleExpression.key.name +
-        //         ' ' +
-        //         `'${styleExpression.value.value}'`
-        //     );
-        //   } else {
-        //     console.log(
-        //       styleExpression.key.name + ' ' + styleExpression.value.value
-        //     );
-        //   }
-        // });
-
-        //generating styles.
-        // const generatedAST = babelTypes.memberExpression(
-        //   babelTypes.identifier('styles'),
-        //   babelTypes.identifier('discountParent')
-        // );
-        // console.log('================  before  =================');
-        // console.log(JSON.stringify(styleExpression));
-        // console.log('====================================\n\n\n\n\n');
-        // //replace with styles.
-        // styleExpression.properties = generatedAST;
-        // path.replaceWith(generatedAST);
-
-        // console.log('=================  after  ===================');
-        // console.log(JSON.stringify(styleExpression));
-        // console.log('====================================');
-      }
-    }
+  VariableDeclaration(path) {
+    console.log(JSON.stringify(path.node));
+    // if (babelTypes.isJSXAttribute(path.node.type)) {
+    //   // if (isStyle(path.node.name.name)) {
+    //   // }
+    // }
   }
 });
-const replaceWithThis = generateStyles('dummy');
-styleNode.replaceWith(replaceWithThis);
-const output = generate(ast);
-console.log(output.code);
+// babelTypes.variableDeclarator(;
+// babelTypes.callExpression()
+// babelTypes.objectExpression();
+const generatedStyleSheet = babelTypes.variableDeclaration(
+  // kind:
+  'const',
+  // declarations:
+  [
+    babelTypes.variableDeclarator(
+      babelTypes.identifier('styles'),
+      babelTypes.callExpression(
+        babelTypes.memberExpression(
+          babelTypes.identifier('StyleSheet'),
+          babelTypes.identifier('create')
+        ),
+        // arguments
+        [
+          babelTypes.objectExpression([
+            // property2
+            babelTypes.objectProperty(
+              babelTypes.identifier('linecolor'),
+              babelTypes.objectExpression([
+                // properties
+                // property 1
+                babelTypes.objectProperty(
+                  babelTypes.identifier('height'),
+                  babelTypes.numericLiteral(40)
+                ),
+                // property 2
+                babelTypes.objectProperty(
+                  babelTypes.identifier('width'),
+                  babelTypes.numericLiteral(50)
+                )
+              ])
+            ),
+
+            // discount parent
+            babelTypes.objectProperty(
+              babelTypes.identifier('discountParent'),
+              babelTypes.objectExpression([
+                // properties
+                // property 1
+                babelTypes.objectProperty(
+                  babelTypes.identifier('height'),
+                  babelTypes.numericLiteral(40)
+                ),
+                // property 2
+                babelTypes.objectProperty(
+                  babelTypes.identifier('width'),
+                  babelTypes.numericLiteral(50)
+                )
+              ])
+            )
+          ])
+        ]
+      )
+    )
+  ]
+);
+console.log(generate(generatedStyleSheet).code);
