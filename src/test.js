@@ -4,7 +4,7 @@ export const test1 = `class Test1 extends React.Component {
     }
     render() {
         return (
-            <View>
+            <View style={{height:100,width:100,backgroundColor:'#f00'}}>
                 <Text style={{ textSize:12 , fontFamily: 'ScalaSansOT',fontSize: 12,letterSpacing: 2 }}>
                     {this.constructor.name}
                 </Text>
@@ -54,3 +54,5 @@ const test4 = `const styles = StyleSheet.create({
       justifyContent: 'space-between'
     });
 `;
+
+const test5 = 
