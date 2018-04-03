@@ -3,6 +3,7 @@ import traverse from 'babel-traverse';
 import { test1, test2, test3, test4, test5 } from './test';
 var babelTypes = require('@babel/types');
 import {
+  generateStyleSheet,
   generateStylePropertyWithValue,
   generateAST,
   isJSXAttribute,
@@ -25,48 +26,6 @@ traverse(ast, {
 // babelTypes.variableDeclarator(;
 // babelTypes.callExpression()
 // babelTypes.objectExpression();
-const generatedStyleSheet = babelTypes.variableDeclaration(
-  // kind:
-  'const',
-  // declarations:
-  [
-    babelTypes.variableDeclarator(
-      babelTypes.identifier('styles'),
-      babelTypes.callExpression(
-        babelTypes.memberExpression(
-          babelTypes.identifier('StyleSheet'),
-          babelTypes.identifier('create')
-        ),
-        // arguments
-        [
-          babelTypes.objectExpression([
-            // property2
-            babelTypes.objectProperty(
-              babelTypes.identifier('linecolor'),
-              babelTypes.objectExpression([
-                // properties
-                // property 1
-                generateStylePropertyWithValue('height', 40),
-                // property 2
-                generateStylePropertyWithValue('width', 50)
-              ])
-            ),
-
-            // discount parent
-            babelTypes.objectProperty(
-              babelTypes.identifier('discountParent'),
-              babelTypes.objectExpression([
-                // properties
-                // property 1
-                generateStylePropertyWithValue('height', 40),
-                // property 2
-                generateStylePropertyWithValue('width', 50)
-              ])
-            )
-          ])
-        ]
-      )
-    )
-  ]
-);
+// generateStyleSheet (['discount','discountParent'],[{'height':40,}])
+const generatedStyleSheet = generateStyleSheet(['parent', 'dummyParent']);
 console.log(generate(generatedStyleSheet).code);

@@ -11,6 +11,39 @@ const options = {
     'objectRestSpread'
   ]
 };
+/**
+ *
+ *
+ * @export
+ * @param {string[]} styleNames
+ * @param {any} styleProperties
+ */
+export function generateStyleSheet(styleNames /*styleProperties*/) {
+  return babelTypes.variableDeclaration('const', [
+    babelTypes.variableDeclarator(
+      babelTypes.identifier('styles'),
+      babelTypes.callExpression(
+        babelTypes.memberExpression(
+          babelTypes.identifier('StyleSheet'),
+          babelTypes.identifier('create')
+        ),
+        [
+          babelTypes.objectExpression(
+            styleNames.map((item, index) => {
+              return babelTypes.objectProperty(
+                babelTypes.identifier(item),
+                babelTypes.objectExpression([
+                  generateStylePropertyWithValue('height', 40),
+                  generateStylePropertyWithValue('width', 50)
+                ])
+              );
+            })
+          )
+        ]
+      )
+    )
+  ]);
+}
 
 // TODO: check type of propertyvalue to generate corresponding literal
 export function generateStylePropertyWithValue(propertyName, propertyValue) {
