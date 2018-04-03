@@ -54,5 +54,3 @@ const test4 = `const styles = StyleSheet.create({
       justifyContent: 'space-between'
     });
 `;
-
-const test5 = 

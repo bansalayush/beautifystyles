@@ -16,12 +16,13 @@ traverse(ast, {
   enter(path) {
     if (isJSXAttribute(path.node.type)) {
       if (isStyle(path.node.name.name)) {
+        // path to which changes will be made
         styleNode = path;
         /** styleExpression contains an array of object mentioned in stylesExpressionObject.js  **/
-        // styleExpression = path.node.value.expression;
-        // console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@\n');
-        // console.log(JSON.stringify(styleExpression));
-        // console.log('\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n');
+        styleExpression = path.node.value.expression;
+        console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@\n');
+        console.log(JSON.stringify(styleExpression));
+        console.log('\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n');
         // let styleExpressionArray = styleExpression.properties;
         // const obj = JSON.stringify(styleExpressionArray);
         // let c = JSON.parse(obj); // converting back to object
