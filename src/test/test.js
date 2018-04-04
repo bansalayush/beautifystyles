@@ -1,4 +1,7 @@
-export const test1 = `class Test1 extends React.Component {
+export const test1 = `
+import * as React from 'react';
+
+class Test1 extends React.Component {
     constructor(props) {
         super(props);
     }
