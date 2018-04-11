@@ -5,9 +5,52 @@ const options = {
   plugins: [
     // enable jsx syntax
     'jsx',
-    'classProperties'
+    'classProperties',
+    'flow',
+    'doExpressions',
+    'objectRestSpread'
   ]
 };
+/**
+ *
+ *
+ * @export
+ * @param {string[]} styleNames
+ * @param {any} styleProperties
+ */
+export function generateStyleSheet(
+  styleNames,
+  styleProperties,
+  existingStyleObjects
+) {
+  let styleObjects = styleNames.map((item, index) => {
+    return babelTypes.objectProperty(
+      babelTypes.identifier(item),
+      styleProperties[index]
+    );
+  });
+  styleObjects.push.apply(styleObjects, existingStyleObjects);
+  return babelTypes.variableDeclaration('const', [
+    babelTypes.variableDeclarator(
+      babelTypes.identifier('styles'),
+      babelTypes.callExpression(
+        babelTypes.memberExpression(
+          babelTypes.identifier('StyleSheet'),
+          babelTypes.identifier('create')
+        ),
+        [babelTypes.objectExpression(styleObjects)]
+      )
+    )
+  ]);
+}
+
+// TODO: check type of propertyvalue to generate corresponding literal
+export function generateStylePropertyWithValue(propertyName, propertyValue) {
+  return babelTypes.objectProperty(
+    babelTypes.identifier(propertyName),
+    babelTypes.numericLiteral(propertyValue)
+  );
+}
 
 export function generateStyles(styleName) {
   return babelTypes.jsxAttribute(
@@ -21,6 +64,7 @@ export function generateStyles(styleName) {
   );
 }
 export function generateAST(code) {
+  // console.log('[ASTUtility]', code);
   const ast = parse(code, options);
   return ast;
 }

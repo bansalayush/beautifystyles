@@ -1,68 +1,102 @@
 import generate from 'babel-generator';
 import traverse from 'babel-traverse';
-import { test1, test2, test3 } from './test';
-var babelTypes = require('@babel/types');
+import { test1, test2, test3, test4 } from './test';
 import {
+  generateStyleSheet,
   generateAST,
   isJSXAttribute,
   isStyle,
   generateStyles
 } from './ASTUtility';
+const babelTypes = require('@babel/types');
+const uuidv1 = require('uuid/v1');
 
 let ast = generateAST(test1);
-let styleExpression;
-let styleNode;
+let objectExpressionArray = []; // stores style object to put in stylesheet.create
+let styleNames = []; // style names
+let nodesToReplace = []; // nodes to replace
+
+let existingStyleSheetNode;
+let existingStyleSheetName = '';
+let existingStyleObjects = [];
 traverse(ast, {
   enter(path) {
-    if (isJSXAttribute(path.node.type)) {
+    // finding pre-existing stylesheet
+    // looking for expressions with stylesheet.create as RHS
+    if (babelTypes.isVariableDeclaration(path.node)) {
+      console.log('variableDeclaration\n, ');
+      if (babelTypes.isVariableDeclarator(path.node.declarations[0])) {
+        console.log('variableDeclarator < === >');
+        // getting variable name of existing stylesheet
+        existingStyleSheetName = path.node.declarations[0].id.name;
+        console.log(existingStyleSheetName);
+        if (babelTypes.isCallExpression(path.node.declarations[0].init)) {
+          console.log('callExpression < == >');
+          if (
+            babelTypes.isMemberExpression(path.node.declarations[0].init.callee)
+          ) {
+            console.log('memberExpression < == >');
+            if (
+              path.node.declarations[0].init.callee.object.name ===
+                'StyleSheet' &&
+              path.node.declarations[0].init.callee.property.name === 'create'
+            ) {
+              existingStyleSheetNode = path;
+              console.log('stylesheet.create < == >');
+              //getting existing style objects present in  stylesheet
+              existingStyleObjects =
+                path.node.declarations[0].init.arguments[0].properties;
+              // console.log(existingStyleObjects);
+            }
+          }
+        }
+      }
+    }
+    if (babelTypes.isJSXAttribute(path.node)) {
       if (isStyle(path.node.name.name)) {
-        styleNode = path;
-        /** styleExpression contains an array of object mentioned in stylesExpressionObject.js  **/
-        // styleExpression = path.node.value.expression;
+        // path to which changes will be made
+        if (babelTypes.isJSXExpressionContainer(path.node.value)) {
+          if (babelTypes.isObjectExpression(path.node.value.expression)) {
+            nodesToReplace.push(path);
+            const styleName = uuidv1();
+            styleNames.push(styleName);
+            objectExpressionArray.push(path.node.value.expression);
+          }
+        }
+
         // console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@\n');
-        // console.log(JSON.stringify(styleExpression));
+        // console.log(JSON.stringify(path.node));
         // console.log('\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n');
-        // let styleExpressionArray = styleExpression.properties;
-        // const obj = JSON.stringify(styleExpressionArray);
-        // let c = JSON.parse(obj); // converting back to object
-        // console.log(obj);
-
-        /** attributes to consider
-         key.name,value.type,value.value **/
-        // c.forEach(styleExpression => {
-        //   if (styleExpression.value.type === 'StringLiteral') {
-        //     console.log(
-        //       styleExpression.key.name +
-        //         ' ' +
-        //         `'${styleExpression.value.value}'`
-        //     );
-        //   } else {
-        //     console.log(
-        //       styleExpression.key.name + ' ' + styleExpression.value.value
-        //     );
-        //   }
-        // });
-
-        //generating styles.
-        // const generatedAST = babelTypes.memberExpression(
-        //   babelTypes.identifier('styles'),
-        //   babelTypes.identifier('discountParent')
-        // );
-        // console.log('================  before  =================');
-        // console.log(JSON.stringify(styleExpression));
-        // console.log('====================================\n\n\n\n\n');
-        // //replace with styles.
-        // styleExpression.properties = generatedAST;
-        // path.replaceWith(generatedAST);
-
-        // console.log('=================  after  ===================');
-        // console.log(JSON.stringify(styleExpression));
-        // console.log('====================================');
       }
     }
   }
 });
-const replaceWithThis = generateStyles('dummy');
-styleNode.replaceWith(replaceWithThis);
+
+// generating Stylesheet
+////
+// merging existing stylesheet data with to be converted data
+
+const generatedStyleSheet = generateStyleSheet(
+  styleNames,
+  objectExpressionArray,
+  existingStyleObjects
+);
+console.log('----STYLESHEET-----');
+
+// replacing old stylesheet with newly generated stylesheet
+if (existingStyleSheetNode) {
+  existingStyleSheetNode.replaceWith(generatedStyleSheet);
+  // console.log(JSON.stringify(existingStyleSheetNode.node));
+  console.log(generate(existingStyleSheetNode).code);
+} else {
+  console.log(generate(generatedStyleSheet).code);
+}
+
+// replacing style object
+nodesToReplace.forEach((styleNode, index) => {
+  let replaceWithThis = generateStyles(styleNames[index]);
+  styleNode.replaceWith(replaceWithThis);
+});
 const output = generate(ast);
+console.log('----CODE----');
 console.log(output.code);
