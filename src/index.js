@@ -11,19 +11,25 @@ import {
 const babelTypes = require('@babel/types');
 const uuidv1 = require('uuid/v1');
 
-let ast = generateAST(test4);
+let ast = generateAST(test1);
 let objectExpressionArray = []; // stores style object to put in stylesheet.create
 let styleNames = []; // style names
 let nodesToReplace = []; // nodes to replace
+
+let existingStyleSheetNode;
+let existingStyleSheetName = '';
+let existingStyleObjects = [];
 traverse(ast, {
   enter(path) {
     // finding pre-existing stylesheet
+    // looking for expressions with stylesheet.create as RHS
     if (babelTypes.isVariableDeclaration(path.node)) {
       console.log('variableDeclaration\n, ');
-      console.log(JSON.stringify(path.node));
-      console.log('\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n');
       if (babelTypes.isVariableDeclarator(path.node.declarations[0])) {
-        console.log('variableDeclarations < === >');
+        console.log('variableDeclarator < === >');
+        // getting variable name of existing stylesheet
+        existingStyleSheetName = path.node.declarations[0].id.name;
+        console.log(existingStyleSheetName);
         if (babelTypes.isCallExpression(path.node.declarations[0].init)) {
           console.log('callExpression < == >');
           if (
@@ -35,8 +41,12 @@ traverse(ast, {
                 'StyleSheet' &&
               path.node.declarations[0].init.callee.property.name === 'create'
             ) {
+              existingStyleSheetNode = path;
               console.log('stylesheet.create < == >');
-              // stylesheetNode = path.node;
+              //getting existing style objects present in  stylesheet
+              existingStyleObjects =
+                path.node.declarations[0].init.arguments[0].properties;
+              // console.log(existingStyleObjects);
             }
           }
         }
@@ -45,39 +55,48 @@ traverse(ast, {
     if (babelTypes.isJSXAttribute(path.node)) {
       if (isStyle(path.node.name.name)) {
         // path to which changes will be made
-        nodesToReplace.push(path);
-        const styleName = uuidv1();
-        styleNames.push(styleName);
-        objectExpressionArray.push(path.node.value.expression);
+        if (babelTypes.isJSXExpressionContainer(path.node.value)) {
+          if (babelTypes.isObjectExpression(path.node.value.expression)) {
+            nodesToReplace.push(path);
+            const styleName = uuidv1();
+            styleNames.push(styleName);
+            objectExpressionArray.push(path.node.value.expression);
+          }
+        }
 
-        console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@\n');
-        console.log(JSON.stringify(path.node));
-        console.log('\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n');
+        // console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@\n');
+        // console.log(JSON.stringify(path.node));
+        // console.log('\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n');
       }
     }
   }
 });
-// This should be inside loop
-// replacing inline styles
-// const replaceWithThis = generateStyles('dummy');
-// styleNode.replaceWith(replaceWithThis);
-// const output = generate(ast);
-// console.log(output.code);
 
 // generating Stylesheet
 ////
-// const generatedStyleSheet = generateStyleSheet(
-//   styleNames,
-//   objectExpressionArray
-// );
-// console.log('----STYLESHEET-----');
-// console.log(generate(generatedStyleSheet).code);
+// merging existing stylesheet data with to be converted data
 
-// // replacing style object
-// nodesToReplace.forEach((styleNode, index) => {
-//   let replaceWithThis = generateStyles(styleNames[index]);
-//   styleNode.replaceWith(replaceWithThis);
-// });
-// const output = generate(ast);
-// console.log('----CODE----');
-// console.log(output.code);
+const generatedStyleSheet = generateStyleSheet(
+  styleNames,
+  objectExpressionArray,
+  existingStyleObjects
+);
+console.log('----STYLESHEET-----');
+
+// replacing old stylesheet with newly generated stylesheet
+if (existingStyleSheetNode) {
+  existingStyleSheetNode.replaceWith(generatedStyleSheet);
+  // console.log(JSON.stringify(existingStyleSheetNode.node));
+  console.log(generate(existingStyleSheetNode).code);
+} else {
+  console.log(generate(generatedStyleSheet).code);
+}
+
+// replacing style object
+nodesToReplace.forEach((styleNode, index) => {
+  let replaceWithThis = generateStyles(styleNames[index]);
+  styleNode.replaceWith(replaceWithThis);
+});
+const output = generate(ast);
+console.log('----CODE----');
+console.log(output.code);

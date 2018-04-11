@@ -79,13 +79,6 @@ export const test4 = `
       fontFamily: 'ScalaSansOT',
       fontSize: 12,
       letterSpacing: this.somestate ? 12 : 13
-    },
-    dummyparent: {
-        textSize: 12,
-        fontFamily: 'ScalaSansOT',
-        fontSize: 12,
-        letterSpacing: this.somestate ? 12 : 13
-      }
-
+    }
   });
   `;

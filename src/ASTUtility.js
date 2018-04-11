@@ -18,7 +18,18 @@ const options = {
  * @param {string[]} styleNames
  * @param {any} styleProperties
  */
-export function generateStyleSheet(styleNames, styleProperties) {
+export function generateStyleSheet(
+  styleNames,
+  styleProperties,
+  existingStyleObjects
+) {
+  let styleObjects = styleNames.map((item, index) => {
+    return babelTypes.objectProperty(
+      babelTypes.identifier(item),
+      styleProperties[index]
+    );
+  });
+  styleObjects.push.apply(styleObjects, existingStyleObjects);
   return babelTypes.variableDeclaration('const', [
     babelTypes.variableDeclarator(
       babelTypes.identifier('styles'),
@@ -27,20 +38,7 @@ export function generateStyleSheet(styleNames, styleProperties) {
           babelTypes.identifier('StyleSheet'),
           babelTypes.identifier('create')
         ),
-        [
-          babelTypes.objectExpression(
-            styleNames.map((item, index) => {
-              return babelTypes.objectProperty(
-                babelTypes.identifier(item),
-                styleProperties[index]
-                // babelTypes.objectExpression([
-                //   generateStylePropertyWithValue('height', 40),
-                //   generateStylePropertyWithValue('width', 50)
-                // ])
-              );
-            })
-          )
-        ]
+        [babelTypes.objectExpression(styleObjects)]
       )
     )
   ]);
