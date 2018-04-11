@@ -45,6 +45,33 @@ export function generateStylePropertyWithValue(propertyName, propertyValue) {
   );
 }
 
+export function isStyleSheet(path) {
+  if (babelTypes.isVariableDeclaration(path.node)) {
+    console.log('variableDeclaration\n, ');
+    if (babelTypes.isVariableDeclarator(path.node.declarations[0])) {
+      console.log('variableDeclarator < === >');
+      if (babelTypes.isCallExpression(path.node.declarations[0].init)) {
+        console.log('callExpression < == >');
+        if (
+          babelTypes.isMemberExpression(path.node.declarations[0].init.callee)
+        ) {
+          console.log('memberExpression < == >');
+          if (
+            path.node.declarations[0].init.callee.object.name ===
+              'StyleSheet' &&
+            path.node.declarations[0].init.callee.property.name === 'create'
+          ) {
+            console.log('stylesheet.create < == >');
+            return true;
+            // console.log(existingStyleObjects);
+          }
+        }
+      }
+    }
+  }
+  return false;
+}
+
 export function generateStyles(styleName) {
   return babelTypes.jsxAttribute(
     babelTypes.jsxIdentifier('style'),
@@ -57,7 +84,13 @@ export function generateStyles(styleName) {
   );
 }
 export function generateAST(code) {
-  const ast = parse(code, options);
+  let ast;
+  try {
+    ast = parse(code, options);
+  } catch (error) {
+    console.log(error);
+    return 'Oops!! error parsing the tree';
+  }
   return ast;
 }
 
