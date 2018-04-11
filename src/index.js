@@ -63,17 +63,12 @@ traverse(ast, {
             objectExpressionArray.push(path.node.value.expression);
           }
         }
-
-        // console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@\n');
-        // console.log(JSON.stringify(path.node));
-        // console.log('\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n');
       }
     }
   }
 });
 
 // generating Stylesheet
-////
 // merging existing stylesheet data with to be converted data
 
 const generatedStyleSheet = generateStyleSheet(

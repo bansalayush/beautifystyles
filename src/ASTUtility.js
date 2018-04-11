@@ -11,13 +11,6 @@ const options = {
     'objectRestSpread'
   ]
 };
-/**
- *
- *
- * @export
- * @param {string[]} styleNames
- * @param {any} styleProperties
- */
 export function generateStyleSheet(
   styleNames,
   styleProperties,
@@ -64,7 +57,6 @@ export function generateStyles(styleName) {
   );
 }
 export function generateAST(code) {
-  // console.log('[ASTUtility]', code);
   const ast = parse(code, options);
   return ast;
 }
