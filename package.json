@@ -2,10 +2,11 @@
   "name": "ast",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rimraf dist/ && babel ./src --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log,./styleExpressionObject.js --copy-files",
+    "build":
+      "rimraf dist/ && babel ./src --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log,./styleExpressionObject.js --copy-files",
     "start": "npm run build  &&  node --inspect  dist/index.js"
   },
   "author": "",
