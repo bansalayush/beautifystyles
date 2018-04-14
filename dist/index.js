@@ -75,10 +75,6 @@ function convertCode(code) {
               objectExpressionArray.push(path.node.value.expression);
             }
           }
-
-          // console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@\n');
-          // console.log(JSON.stringify(path.node));
-          // console.log('\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n');
         }
       }
     }
@@ -118,4 +114,4 @@ function convertCode(code) {
   // console.log('----CODE----');
 }
 
-console.log(convertCode(_test.test3));
+// console.log(convertCode(test3));
