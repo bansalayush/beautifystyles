@@ -13,7 +13,7 @@ const uuidv1 = require('uuid/v1');
 
 export function convertCode(code) {
   let returnCode = '';
-  console.log('before generating ast');
+  // console.log('before generating ast');
   let ast = generateAST(code);
   if (ast === 'Oops!! error parsing the tree') {
     // console.log('after generating ast');
@@ -108,7 +108,7 @@ export function convertCode(code) {
     const output = generate(ast);
     returnCode = `${returnCode} \n${output.code}`;
   } catch (error) {
-    console.logG(error);
+    console.log(error);
   }
   // console.log(returnCode);
   return returnCode;
@@ -116,4 +116,4 @@ export function convertCode(code) {
   // console.log('----CODE----');
 }
 
-// console.log(convertCode(test3));
+// console.log(convertCode(test4));

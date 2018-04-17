@@ -24,7 +24,7 @@ var uuidv1 = require('uuid/v1');
 
 function convertCode(code) {
   var returnCode = '';
-  console.log('before generating ast');
+  // console.log('before generating ast');
   var ast = (0, _ASTUtility.generateAST)(code);
   if (ast === 'Oops!! error parsing the tree') {
     // console.log('after generating ast');
@@ -106,7 +106,7 @@ function convertCode(code) {
     var output = (0, _babelGenerator2.default)(ast);
     returnCode = returnCode + ' \n' + output.code;
   } catch (error) {
-    console.logG(error);
+    console.log(error);
   }
   // console.log(returnCode);
   return returnCode;
@@ -114,4 +114,4 @@ function convertCode(code) {
   // console.log('----CODE----');
 }
 
-// console.log(convertCode(test3));
+// console.log(convertCode(test4));

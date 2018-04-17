@@ -61,7 +61,8 @@ export function generateAST(code) {
   try {
     ast = parse(code, options);
   } catch (error) {
-    console.log(error);
+    // console.log(error);
+    // return error;
     return 'Oops!! error parsing the tree';
   }
   return ast;
