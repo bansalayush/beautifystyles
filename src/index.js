@@ -69,7 +69,7 @@ export function convertCode(code) {
               console.log('getting style={{}}');
               nodesToReplace.push(path);
               let styleName = 'a' + uuidv1();
-              styleName = styleName.replace('-', '');
+              styleName = styleName.replace(/-/g, '');
               styleNames.push(styleName);
               objectExpressionArray.push(path.node.value.expression);
             }
@@ -117,4 +117,4 @@ export function convertCode(code) {
   // console.log('----CODE----');
 }
 
-// console.log(convertCode(test4));
+// console.log(convertCode(test1));
