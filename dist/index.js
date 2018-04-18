@@ -71,7 +71,7 @@ function convertCode(code) {
               console.log('getting style={{}}');
               nodesToReplace.push(path);
               var styleName = 'a' + uuidv1();
-              styleName.replace('-', '');
+              styleName = styleName.replace('-', '');
               styleNames.push(styleName);
               objectExpressionArray.push(path.node.value.expression);
             }
