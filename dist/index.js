@@ -70,7 +70,8 @@ function convertCode(code) {
             if (babelTypes.isObjectExpression(path.node.value.expression)) {
               console.log('getting style={{}}');
               nodesToReplace.push(path);
-              var styleName = uuidv1();
+              var styleName = 'a' + uuidv1();
+              styleName.replace('-', '');
               styleNames.push(styleName);
               objectExpressionArray.push(path.node.value.expression);
             }

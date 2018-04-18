@@ -68,7 +68,8 @@ export function convertCode(code) {
             if (babelTypes.isObjectExpression(path.node.value.expression)) {
               console.log('getting style={{}}');
               nodesToReplace.push(path);
-              const styleName = uuidv1();
+              const styleName = 'a' + uuidv1();
+              styleName.replace('-', '');
               styleNames.push(styleName);
               objectExpressionArray.push(path.node.value.expression);
             }
